@@ -1,0 +1,17 @@
+{
+  "src/assets/react.svg": {
+    "file": "assets/react-h3aPdYU7.svg",
+    "src": "src/assets/react.svg"
+  },
+  "src/main.jsx": {
+    "assets": [
+      "assets/react-h3aPdYU7.svg"
+    ],
+    "css": [
+      "assets/main-4sK4E3Wk.css"
+    ],
+    "file": "assets/main-J9MT3V90.js",
+    "isEntry": true,
+    "src": "src/main.jsx"
+  }
+}

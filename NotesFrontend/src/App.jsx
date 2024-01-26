@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
 import { Note } from "./Note";
 
-
-
 function App() {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -19,15 +17,24 @@ function App() {
     console.log(notes);
   }, [notes])
 
+  async function loadQuote() {
+    const res = await fetch("https://api.quotable.io/quotes/random");
+    const quotes = await res.json();
+    setQuote(quotes[0]);
+  }
+
+
+
   useEffect(() => {
-    fetch("https://api.quotable.io/quotes/random")
-      .then((res) =>
-        res.json()
-          .then((quotes) => {
-            setQuote(quotes[0]);
-          })
-      )
-  }, [notes])
+    loadQuote();
+    const click = () => {
+      console.log(notes);
+    }
+    window.addEventListener("click", click);
+    return () => {
+      window.removeEventListener("click", click)
+    }
+  }, [notes]);
 
   return (
       <>
