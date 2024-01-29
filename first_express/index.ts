@@ -1,15 +1,24 @@
 import express from "express";
 import path from "path";
+import {name} from "./controllers/home_controller";
+import { engine } from 'express-handlebars';
+import fs from "fs";
+const DEBUG = process.env.NODE_ENV !== "production";
+const MANIFEST: Record<string, any> = DEBUG ? {} : JSON.parse(fs.readFileSync("static/.vite/manifest.json").toString())
 
 const app = express();
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`)
+  console.log(name);
   next()
 });
 
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static('static'))
+if (!DEBUG) {
+  app.use(express.static('static'));
 } else {
   app.use((req, res, next) => {
     if (req.url.includes(".")) {
@@ -21,8 +30,14 @@ if (process.env.NODE_ENV === "production") {
 }
 
 
+console.log(MANIFEST);
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/index.html"));
+  res.render('index', {
+    debug: DEBUG,
+    jsBundle: DEBUG ? "" : MANIFEST["src/main.jsx"]["file"],
+    cssBundle: DEBUG ? "" : MANIFEST["src/main.jsx"]["css"][0],
+    layout: false
+  });
 });
 
 app.get("/random_number", (req, res) => {
@@ -32,3 +47,5 @@ app.get("/random_number", (req, res) => {
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
 });
+
+

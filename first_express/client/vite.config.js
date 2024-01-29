@@ -11,6 +11,6 @@ export default defineConfig({
       // overwrite default .html entry
       input: './src/main.jsx',
     },
-    outDir: '../static'
+    outDir: '../dist/static'
   },
 })
