@@ -1,19 +1,37 @@
 import express from "express";
-import path from "path";
-import {name} from "./controllers/home_controller";
 import { engine } from 'express-handlebars';
+import {createServer} from "node:http";
+import { Server } from "socket.io";
 import fs from "fs";
 const DEBUG = process.env.NODE_ENV !== "production";
 const MANIFEST: Record<string, any> = DEBUG ? {} : JSON.parse(fs.readFileSync("static/.vite/manifest.json").toString())
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log("Connection recieved!");
+
+  socket.on("disconnect",  () => {
+    console.log("Client disconnected!")
+  });
+
+  socket.on("increment", (data) => {
+    console.log(data)
+  });
+
+  socket.on("decrement", (data) => {
+    console.log(data)
+  });
+});
+
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`)
-  console.log(name);
   next()
 });
 
@@ -44,7 +62,7 @@ app.get("/random_number", (req, res) => {
   res.json({ number: Math.random() * 1000 });
 });
 
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log("Listening on port 3000...");
 });
 
