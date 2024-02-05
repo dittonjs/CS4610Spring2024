@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import {io} from "socket.io-client";
-
+// 144.39.198.208
 function App() {
   const [count, setCount] = useState(0)
   const [socket, setSocket] = useState(null);
-
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const s = io();
@@ -14,26 +13,30 @@ function App() {
     return () => {
       s.disconnect();
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("increment", () => {
-      setCount(currentCount => currentCount + 1);
+    socket.on("new state", (newCount) => {
+      setCount(newCount);
+      if (loading) {
+        setLoading(false);
+      }
     });
-  }, [socket])
+
+  }, [socket, loading]);
 
   function increment() {
-    socket.emit("increment", "Hello, world!")
+    socket.emit("increment");
   }
 
   function decrement() {
-    socket.emit("decrement", "Hello, world!")
+    socket.emit("decrement");
   }
 
   return (
     <>
-      <h1>{count}</h1>
+      <h1>{loading ? "Loading... " : count}</h1>
       <button onClick={increment}>Increment</button>
       <button onClick={decrement}>Decrement</button>
     </>

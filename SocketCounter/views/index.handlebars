@@ -7,7 +7,7 @@
     <title>Vite + React</title>
     {{#if debug}}
       <script type="module">
-        import RefreshRuntime from 'http://localhost:5173/@react-refresh'
+        import RefreshRuntime from '{{assetUrl}}/@react-refresh'
         RefreshRuntime.injectIntoGlobalHook(window)
         window.$RefreshReg$ = () => {}
         window.$RefreshSig$ = () => (type) => type
@@ -18,8 +18,8 @@
   <body>
     <div id="root"></div>
     {{#if debug}}
-      <script type="module" src="http://localhost:5173/@vite/client"></script>
-      <script type="module" src="http://localhost:5173/src/main.jsx"></script>
+      <script type="module" src="{{assetUrl}}/@vite/client"></script>
+      <script type="module" src="{{assetUrl}}/src/main.jsx"></script>
     {{else}}
       <link rel="stylesheet" href="/{{cssBundle}}"></link>
       <script src="/{{jsBundle}}"></script>
