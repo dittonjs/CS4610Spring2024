@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/app/Dockerfile
+    container_name: "node-express"
+    ports:
+      - 3000:3000
+    environment:
+      - "API_URL=http://api:3010"
+  api:
+    build:
+      context: ./
+      dockerfile: ./docker/api/Dockerfile
+    container_name: "node-express-api"
+    ports:
+      - 3010:3010
