@@ -17,13 +17,16 @@ function App() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("new state", (newCount) => {
+    const callback = (newCount) => {
       setCount(newCount);
       if (loading) {
         setLoading(false);
       }
-    });
-
+    }
+    socket.on("new state", callback);
+    return () => {
+      socket.off("new state", callback);
+    }
   }, [socket, loading]);
 
   function increment() {

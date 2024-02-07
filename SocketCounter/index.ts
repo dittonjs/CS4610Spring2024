@@ -19,7 +19,7 @@ io.on("connection", (socket) => {
   console.log("Connection recieved!");
 
   socket.emit("new state", COUNT);
-  socket.id
+
   socket.on("disconnect",  () => {
     console.log("Client disconnected!")
   });
@@ -50,7 +50,7 @@ if (!DEBUG) {
 } else {
   app.use((req, res, next) => {
     if (req.url.includes(".")) {
-      res.redirect(`http://localhost:5173${req.url}`)
+      res.redirect(`${process.env.ASSET_URL}/${req.url}`)
     } else {
       next();
     }
