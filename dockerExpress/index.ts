@@ -5,6 +5,7 @@ import fetch from "node-fetch";
 const app = express();
 
 app.get("/", async (req, res) => {
+  console.log(process.env);
   const data = await fetch(process.env.API_URL || "http://localhost:3010");
   const body = await data.json();
   console.log(body);

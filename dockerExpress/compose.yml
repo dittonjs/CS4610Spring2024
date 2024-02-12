@@ -13,5 +13,3 @@ services:
       context: ./
       dockerfile: ./docker/api/Dockerfile
     container_name: "node-express-api"
-    ports:
-      - 3010:3010
