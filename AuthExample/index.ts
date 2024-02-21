@@ -2,6 +2,9 @@ import express from "express";
 import path from "path";
 import { engine } from 'express-handlebars';
 import fs from "fs";
+import * as dotenv from "dotenv";
+dotenv.config();
+
 const DEBUG = process.env.NODE_ENV !== "production";
 const MANIFEST: Record<string, any> = DEBUG ? {} : JSON.parse(fs.readFileSync("static/.vite/manifest.json").toString())
 
@@ -20,7 +23,7 @@ if (!DEBUG) {
 } else {
   app.use((req, res, next) => {
     if (req.url.includes(".")) {
-      res.redirect(`http://localhost:5173${req.url}`)
+      res.redirect(`${process.env.ASSET_URL}/${req.url}`)
     } else {
       next();
     }
@@ -34,6 +37,7 @@ app.get("/", (req, res) => {
     debug: DEBUG,
     jsBundle: DEBUG ? "" : MANIFEST["src/main.jsx"]["file"],
     cssBundle: DEBUG ? "" : MANIFEST["src/main.jsx"]["css"][0],
+    assetUrl: process.env.ASSET_URL,
     layout: false
   });
 });
@@ -42,8 +46,8 @@ app.get("/random_number", (req, res) => {
   res.json({ number: Math.random() * 1000 });
 });
 
-server.listen(3000, () => {
-  console.log("Listening on port 3000...");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Listening on port ${process.env.PORT || 3000}...`);
 });
 
 
