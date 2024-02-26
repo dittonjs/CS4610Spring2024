@@ -2,7 +2,14 @@ import express from "express";
 import path from "path";
 import { engine } from 'express-handlebars';
 import fs from "fs";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
+
+const db = new PrismaClient();
+
 dotenv.config();
 
 const DEBUG = process.env.NODE_ENV !== "production";
@@ -13,6 +20,7 @@ app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
+app.use(bodyParser.json());
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`)
   next()
@@ -41,6 +49,36 @@ app.get("/", (req, res) => {
     layout: false
   });
 });
+
+app.post("/users", async (req, res) => {
+  const user = await db.user.create({
+    data: {
+      email: req.body.email,
+      password_hash: bcrypt.hashSync(req.body.password),
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      profile: {
+        create: {}
+      }
+    }
+  });
+  res.json({ user });
+});
+
+app.post("/sessions", async (req, res) => {
+  const user = await db.user.findUnique({
+    where: {
+      email: req.body.email
+    }
+  });
+
+  if (user && bcrypt.compareSync(req.body.password, user.password_hash)) {
+    // user provided correct email and password
+    // sign the user in
+  } else {
+    res.status(404).json({ error: "not found" })
+  }
+})
 
 app.get("/random_number", (req, res) => {
   res.json({ number: Math.random() * 1000 });

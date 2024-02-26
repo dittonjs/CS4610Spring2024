@@ -1,46 +1,14 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { Login } from './Login'
+import { SignUp } from './SignUp'
+import { Outlet } from "react-router-dom";
 function App() {
-  const [count, setCount] = useState(0)
-  const [randomNumber, setRandomNumber] = useState(0);
-
-  async function getRandomNumber() {
-    const res = await fetch("/random_number");
-    const body = await res.json();
-    setRandomNumber(body.number);
-  }
-
-  useEffect(() => {
-    getRandomNumber();
-  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-        <p>Random number: {randomNumber}</p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <nav className="my-nav"><h2>App Name</h2></nav>
+      <Outlet />
+    </div>
   )
 }
 
