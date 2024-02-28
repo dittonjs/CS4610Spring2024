@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 
 const db = new PrismaClient();
@@ -62,7 +63,12 @@ app.post("/users", async (req, res) => {
       }
     }
   });
-  res.json({ user });
+
+  const token = jwt.sign({
+    userId: user.id,
+  }, process.env.ENCRYPTION_KEY as string);
+
+  res.json({ user, token });
 });
 
 app.post("/sessions", async (req, res) => {
@@ -73,16 +79,44 @@ app.post("/sessions", async (req, res) => {
   });
 
   if (user && bcrypt.compareSync(req.body.password, user.password_hash)) {
-    // user provided correct email and password
-    // sign the user in
+    const token = jwt.sign({
+      userId: user.id,
+    }, process.env.ENCRYPTION_KEY as string);
+
+    res.json({ token });
   } else {
-    res.status(404).json({ error: "not found" })
+    res.status(404).json({ error: "Invalid email or password" })
   }
 })
 
-app.get("/random_number", (req, res) => {
-  res.json({ number: Math.random() * 1000 });
-});
+type JwtPayload = {
+  userId: number
+}
+
+app.get("/me", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]
+  if (!token) {
+    res.status(401).json({ error: "not authorized" });
+    return;
+  }
+  try {
+    const payload = jwt.verify(token, process.env.ENCRYPTION_KEY as string) as JwtPayload
+    const user = await db.user.findUnique({
+      where: {
+        id: payload.userId
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true
+      }
+    });
+    res.json({ user });
+  } catch(e) {
+    res.status(401).json({ error: "not authorized" });
+    return;
+  }
+})
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${process.env.PORT || 3000}...`);

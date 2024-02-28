@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function login(e) {
     e.preventDefault();
@@ -15,8 +17,10 @@ export const Login = () => {
         email,
         password,
       })
-    })
-    console.log(await res.json());
+    });
+    const {token} = await res.json();
+    window.localStorage.setItem("jwt", token);
+    navigate("/")
   }
 
   return (
@@ -38,7 +42,7 @@ export const Login = () => {
           onChange={e => setPassword(e.target.value)}
         />
 
-        <button>Create Account</button>
+        <button>Sign In</button>
       </form>
     </>
   )
