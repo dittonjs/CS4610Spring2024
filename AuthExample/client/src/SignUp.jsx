@@ -25,7 +25,7 @@ export const SignUp = () => {
   return (
     <>
       <h2>Sign Up</h2>
-      <form className="sign-up-form" onSubmit={() => {}}>
+      <form className="sign-up-form" onSubmit={createUser}>
         <input
           placeholder="First name"
           type="text"
