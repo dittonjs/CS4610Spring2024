@@ -6,7 +6,7 @@ export const Home = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   async function getUser() {
-    const res = await fetch("/me", {
+    const res = await fetch("/users/me", {
       method: "get",
       headers: {
         "Authorization": `Bearer ${token}`
