@@ -6,7 +6,6 @@ import { DEBUG, MANIFEST } from "../../index";
 // /users/...
 export const buildHomeController = (db: PrismaClient) => {
   const router = Router();
-
   router.get("/", (req, res) => {
     res.render('index', {
       debug: DEBUG,
