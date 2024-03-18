@@ -1,24 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "../utils/use_api";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const api = useApi();
 
   async function login(e) {
     e.preventDefault();
-    const res = await fetch("/sessions", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      })
+    const {token} = await api.post("/sessions", {
+      email,
+      password,
     });
-    const {token} = await res.json();
+
     window.localStorage.setItem("jwt", token);
     navigate("/")
   }

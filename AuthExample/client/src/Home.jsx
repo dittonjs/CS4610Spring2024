@@ -12,6 +12,7 @@ export const Home = () => {
         "Authorization": `Bearer ${token}`
       },
     });
+    console.log(res);
     if (res.ok) {
       const body = await res.json();
       console.log(body)

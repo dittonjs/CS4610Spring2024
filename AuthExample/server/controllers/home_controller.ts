@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { DEBUG, MANIFEST } from "../../index";
 // /users/...
-export const buildHomeController = (db: PrismaClient) => {
+export const buildHomeController = () => {
   const router = Router();
   router.get("/", (req, res) => {
     res.render('index', {

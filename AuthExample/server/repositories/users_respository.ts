@@ -10,9 +10,16 @@ export type CreateUserPayload = {
 
 export class UsersRepository {
   private db: PrismaClient
-
+  private static instance: UsersRepository
   constructor(db: PrismaClient) {
     this.db = db;
+  }
+
+  static getInstance(db?: PrismaClient): UsersRepository {
+    if (!this.instance) {
+      this.instance = new UsersRepository(db!!);
+    }
+    return this.instance;
   }
 
 
@@ -30,7 +37,11 @@ export class UsersRepository {
     });
   }
 
-  getUserById() {
-
+  async getUserById(id: number) {
+    return this.db.user.findUnique({
+      where: {
+        id: id
+      },
+    });
   }
 }

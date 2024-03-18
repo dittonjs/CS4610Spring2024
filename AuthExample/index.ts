@@ -14,7 +14,7 @@ import { UsersRepository } from "./server/repositories/users_respository";
 
 
 const db = new PrismaClient();
-const usersRepository = new UsersRepository(db);
+const usersRepository = UsersRepository.getInstance(db);
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ if (!DEBUG) {
 }
 
 
-app.use("/", buildHomeController(db));
+app.use("/", buildHomeController());
 app.use("/users", buildUsersController(usersRepository));
 app.use("/sessions", buildSessionsController(db));
 
