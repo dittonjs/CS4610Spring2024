@@ -7,7 +7,7 @@ export class Api {
     const options = {
       method,
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `Bearer ${this.token}`,
         "Content-Type": "application/json"
       },
     }
@@ -20,19 +20,19 @@ export class Api {
   }
 
   get(uri) {
-    return this.makeRequest(uri, "get")
+    return this.makeRequest(uri, "GET")
   }
 
   post(uri, body) {
-    return this.makeRequest(uri, "post", body)
+    return this.makeRequest(uri, "POST", body)
   }
 
   put(uri, body) {
-    return this.makeRequest(uri, "put", body)
+    return this.makeRequest(uri, "PUT", body)
   }
 
   del(uri) {
-    return this.makeRequest(uri, "del")
+    return this.makeRequest(uri, "DELETE")
   }
 }
 

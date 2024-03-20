@@ -22,7 +22,7 @@ export const buildUsersController = (usersRepository: UsersRepository) => {
   });
 
   router.get("/me", authMiddleware, (req, res) => {
-    res.json({ user: req.user});
+    res.json({ user: req.user });
   });
 
   return router;

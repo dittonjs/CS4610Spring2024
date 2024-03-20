@@ -7,6 +7,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const api = useApi();
+  console.log(api);
 
   async function login(e) {
     e.preventDefault();
