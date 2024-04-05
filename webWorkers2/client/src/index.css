@@ -1,0 +1,19 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.loading {
+  animation-name: myAnimation;
+  animation-duration: 2s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+
+@keyframes myAnimation {
+  from {
+    font-size: 12px;
+  }
+  to {
+    font-size: 48px;
+  }
+}

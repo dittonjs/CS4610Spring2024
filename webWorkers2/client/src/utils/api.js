@@ -24,17 +24,6 @@ export class Api {
     return res.json();
   }
 
-  upload(url, formData) {
-    return fetch(url, {
-      method: "post",
-      headers: {
-        Authorization: `Bearer ${this.authToken}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formData,
-    });
-  }
-
   get(url) {
     return this.makeRequest(url, 'GET');
   }

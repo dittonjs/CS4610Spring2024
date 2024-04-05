@@ -49,28 +49,6 @@ app.use("/", buildHomeController());
 app.use("/users", buildUsersController(usersRepository));
 app.use("/sessions", buildSessionsController(db));
 
-app.post("/uploads", (req, res) => {
-  const data: Buffer[] = [];
-  req.on("data", (chunk) => {
-    data.push(chunk);
-  });
-
-  req.on("end", () => {
-    // do something with the data
-    const buffer = Buffer.concat(data);
-    const dataString = buffer.toString("utf-8");
-    const parts = dataString.split(/--.+\r\n/);
-    const part = parts.at(-2)!!;
-    const i = part.indexOf('\r\n\r\n');
-    const splits = [part.slice(0,i), part.slice(i+4)];
-
-    const fileBuffer = Buffer.from(splits[1]!!, "utf-8");
-    fs.writeFileSync(path.join(__dirname, "uploaded_files", "file.txt"), fileBuffer);
-    res.json({});
-  })
-});
-
-
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${process.env.PORT || 3000}...`);
 });
