@@ -29,7 +29,7 @@ export class Api {
       method: "post",
       headers: {
         Authorization: `Bearer ${this.authToken}`,
-        'Content-Type': 'multipart/form-data',
+        
       },
       body: formData,
     });
